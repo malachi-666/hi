@@ -4,56 +4,49 @@
 set -e
 
 # Configuration
-ENV_DIR="venv"
-MODEL_NAME="sovereign-ai"
-ALIAS_NAME="sai"
-DB_PATH="$HOME/.local_ai_memory.db"
+ENV_DIR="ai_env"
+ALIAS_NAME="lai" # local ai
+FAST_MODEL="llama3" # Example 8B fast model
+HEAVY_MODEL="llama3:70b" # Example 70B heavy model (adjust based on actual quantized model availability)
 
-# 1. Initialize the SQLite database
-# The Python script handles creating the table if it doesn't exist, but we can ensure the file is there.
-if [ ! -f "$DB_PATH" ]; then
-    echo "Initializing SQLite database at $DB_PATH..."
-    touch "$DB_PATH"
-else
-    echo "SQLite database already exists at $DB_PATH."
-fi
-
-# 2. Set up the Python virtual environment and dependencies
+# 1. Set up the Python virtual environment
 if [ ! -d "$ENV_DIR" ]; then
-    echo "Creating Python virtual environment..."
+    echo "Creating Python virtual environment in $ENV_DIR..."
     python3 -m venv "$ENV_DIR"
+else
+    echo "Virtual environment $ENV_DIR already exists."
 fi
 
-echo "Activating virtual environment and installing dependencies..."
+# 2. Install dependencies (Open Interpreter)
+echo "Activating virtual environment and installing Open Interpreter..."
 source "$ENV_DIR/bin/activate"
 pip install --upgrade pip
-pip install requests
+# Install open-interpreter which handles the heavy lifting of system interaction safely
+pip install open-interpreter
 
-# 3. Pull the base model and create the custom model via Modelfile
+# 3. Pull required Ollama models
 # Assuming ollama is installed and running
-echo "Pulling base model (llama3)..."
-ollama pull llama3
+echo "Pulling fast model ($FAST_MODEL)..."
+ollama pull $FAST_MODEL || echo "Warning: Could not pull $FAST_MODEL. Is Ollama running?"
 
-echo "Creating custom model ($MODEL_NAME) from Modelfile..."
-ollama create $MODEL_NAME -f Modelfile
+echo "Pulling heavy model ($HEAVY_MODEL)..."
+ollama pull $HEAVY_MODEL || echo "Warning: Could not pull $HEAVY_MODEL. Is Ollama running?"
 
 # 4. Set up a global terminal alias
-# We'll determine the absolute path to the daemon.py script
-SCRIPT_PATH=$(realpath "daemon.py")
+SCRIPT_PATH=$(realpath "orchestrator.py")
 VENV_PYTHON=$(realpath "$ENV_DIR/bin/python")
 
-# Add alias to .bashrc if it doesn't exist
 BASHRC="$HOME/.bashrc"
 ALIAS_CMD="alias $ALIAS_NAME='$VENV_PYTHON $SCRIPT_PATH'"
 
 if ! grep -q "alias $ALIAS_NAME=" "$BASHRC"; then
     echo "Adding alias '$ALIAS_NAME' to $BASHRC..."
     echo "" >> "$BASHRC"
-    echo "# Sovereign AI Alias" >> "$BASHRC"
+    echo "# Sovereign AI Orchestrator Alias" >> "$BASHRC"
     echo "$ALIAS_CMD" >> "$BASHRC"
     echo "Alias added. Run 'source ~/.bashrc' or restart your terminal to use '$ALIAS_NAME'."
 else
     echo "Alias '$ALIAS_NAME' already exists in $BASHRC."
 fi
 
-echo "Setup complete!"
+echo "Setup complete! Open Interpreter is installed and ready."
