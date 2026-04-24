@@ -14,8 +14,10 @@ DB_PATH="$HOME/.local_ai_memory.db"
 if [ ! -f "$DB_PATH" ]; then
     echo "Initializing SQLite database at $DB_PATH..."
     touch "$DB_PATH"
+    chmod 600 "$DB_PATH"
 else
     echo "SQLite database already exists at $DB_PATH."
+    chmod 600 "$DB_PATH"
 fi
 
 # 2. Set up the Python virtual environment and dependencies
