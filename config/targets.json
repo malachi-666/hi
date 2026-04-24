@@ -1,0 +1,49 @@
+{
+    "targets": [
+        {
+            "query_name": "PreSonus AudioBox",
+            "search_aliases": ["audiobox", "presonus audio interface", "audiobox usb", "audio interface"],
+            "category": "Music Production",
+            "intrinsic_value": 100,
+            "max_acquisition_price": 15,
+            "min_roi_percentage": 500,
+            "condition_requirements": ["working", "used"]
+        },
+        {
+            "query_name": "Akai MPK Mini",
+            "search_aliases": ["akai mpk", "midi keyboard", "midi controller", "launchkey"],
+            "category": "Music Production",
+            "intrinsic_value": 120,
+            "max_acquisition_price": 18,
+            "min_roi_percentage": 500,
+            "condition_requirements": ["working", "used"]
+        },
+        {
+            "query_name": "Air Compressor",
+            "search_aliases": ["air compressor", "pancake compressor", "dewalt compressor"],
+            "category": "Heavy Tools",
+            "intrinsic_value": 150,
+            "max_acquisition_price": 22,
+            "min_roi_percentage": 500,
+            "condition_requirements": ["runs", "used"]
+        },
+        {
+            "query_name": "Lumber / Plywood",
+            "search_aliases": ["plywood", "2x4", "lumber", "scrap wood"],
+            "category": "Raw Materials",
+            "intrinsic_value": 100,
+            "max_acquisition_price": 15,
+            "min_roi_percentage": 500,
+            "condition_requirements": ["usable", "scrap"]
+        },
+        {
+            "query_name": "Commercial Networking Switch",
+            "search_aliases": ["cisco switch", "ubiquiti", "unifi switch", "networking gear"],
+            "category": "Commercial Electronics",
+            "intrinsic_value": 200,
+            "max_acquisition_price": 30,
+            "min_roi_percentage": 500,
+            "condition_requirements": ["working", "untested"]
+        }
+    ]
+}
