@@ -1,6 +1,5 @@
 import argparse
 import sqlite3
-import json
 import sys
 import os
 import requests
